@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malla Curricular Interactiva - Derecho (Plan 2008)</title>
+    <style>
+        :root {
+            --color-aid: #fff1b8; /* Amarillo - Iniciación a la Disciplina */
+            --color-afd: #cbf3f0; /* Azul claro - Formación Disciplinaria */
+            --color-afbg: #d4edda; /* Verde - Formación Básica General */
+            --color-aftob: #d6e2e9; /* Azul grisáceo - Terminal / Obligatoria */
+            --color-optativa: #ffccd5; /* Rosa - Optativas */
+            --color-electiva: #ffd6a5; /* Naranja - Electivas */
+            --color-bloqueado: #e0e0e0;
+            --text-bloqueado: #9e9e9e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 4px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        h1 { margin: 0; color: #0056b3; font-size: 24px; text-transform: uppercase; }
+        h2 { margin: 5px 0 0 0; font-size: 18px; color: #555; }
+
+        .controles {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-pdf { background-color: #28a745; color: white; }
+        .btn-pdf:hover { background-color: #218838; }
+        .btn-reset { background-color: #dc3545; color: white; }
+        .btn-reset:hover { background-color: #c82333; }
+
+        /* Contenedor Grid de la Malla */
+        .malla-container {
+            display: grid;
+            grid-template-columns: repeat(8, minmax(140px, 1fr));
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .columna-ciclo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .titulo-ciclo {
+            background-color: #b388ff;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        /* Tarjeta de Materia */
+        .materia {
+            position: relative;
+            padding: 10px;
+            border-radius: 6px;
+            min-height: 85px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .materia:hover:not(.bloqueada) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+        }
+
+        /* Clases por Área (Colores Pasteles) */
+        .aid { background-color: var(--color-aid); border-color: #ffe066; }
+        .afd { background-color: var(--color-afd); border-color: #a2e8dd; }
+        .afbg { background-color: var(--color-afbg); border-color: #c3e6cb; }
+        .aftob { background-color: var(--color-aftob); border-color: #bcd4e6; }
+        .optativa { background-color: var(--color-optativa); border-color: #ffb3c1; }
+        .electiva { background-color: var(--color-electiva); border-color: #ffc6ff; }
+
+        /* Estados */
+        .materia.aprobada {
+            background-color: #4caf50 !important;
+            color: white !important;
+            border-color: #388e3c !important;
+            text-decoration: line-through;
+        }
+
+        .materia.bloqueada {
+            background-color: var(--color-bloqueado) !important;
+            color: var(--text-bloqueado) !important;
+            border-color: #d6d6d6 !important;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .creditos {
+            font-size: 9px;
+            font-weight: bold;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        /* Tooltip para bloqueadas */
+        .materia .tooltip {
+            visibility: hidden;
+            width: 160px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 6px;
+            position: absolute;
+            z-index: 10;
+            bottom: 105%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 10px;
+            line-height: 1.3;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        }
+
+        .materia:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Configuración de Impresión / PDF */
+        @media print {
+            body { padding: 0; background-color: white; }
+            .controles { display: none; }
+            .malla-container { overflow-x: visible; display: grid; }
+            .materia { box-shadow: none; border: 1px solid #000; page-break-inside: avoid; }
+            .materia.aprobada { background-color: #d4edda !important; color: #155724 !important; border-color: #c3e6cb !important; }
+            .materia.bloqueada { background-color: #f8f9fa !important; color: #6c757d !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Derecho</h1>
+        <h2>Mapa Curricular (Plan 2008)</h2>
+    </header>
+
+    <div class="controles">
+        <button class="btn-pdf" onclick="exportarPDF()">Guardar como PDF / Imprimir</button>
+        <button class="btn-reset" onclick="reiniciarProgreso()">Reiniciar Progreso</button>
+    </div>
+
+    <div class="malla-container" id="malla">
+        </div>
+
+    <script>
+        // Estructura de datos basada fielmente en la imagen del Plan de Estudios
+        const materias = [
+            // C इनका 1
+            { id: "romano", nombre: "Derecho Romano", area: "aid", creditos: 8, ciclo: 1, req: [] },
+            { id: "personas", nombre: "Derecho de Personas y Familia", area: "afd", creditos: 8, ciclo: 1, req: [] },
+            { id: "intro", nombre: "Introducción al Derecho", area: "aid", creditos: 8, ciclo: 1, req: [] },
+            { id: "pol", nombre: "Teoría Política", area: "aid", creditos: 8, ciclo: 1, req: [] },
+            { id: "met1", nombre: "Metodología de la Investigación Jurídica", area: "aid", creditos: 8, ciclo: 1, req: [] },
+            { id: "lectura", nombre: "Lectura y redacción... mundo contemp.", area: "afbg", creditos: 6, ciclo: 1, req: [] },
+            { id: "pensamiento", nombre: "Habilidades del Pensamiento crítico...", area: "afbg", creditos: 6, ciclo: 1, req: [] },
+
+            // Ciclo 2
+            { id: "inst_romano", nombre: "Instituciones de derecho privado Romano", area: "afd", creditos: 8, ciclo: 2, req: ["romano"], reqNombre: "Derecho Romano" },
+            { id: "penal_gen", nombre: "Derecho Penal General", area: "afd", creditos: 8, ciclo: 2, req: [] },
+            { id: "bienes", nombre: "Derecho de Bienes y Sucesiones", area: "afd", creditos: 8, ciclo: 2, req: [] },
+            { id: "eco", nombre: "Teoría Económica", area: "aid", creditos: 8, ciclo: 2, req: [] },
+            { id: "met_cie", nombre: "Metodología de la Ciencia del Derecho", area: "aid", creditos: 8, ciclo: 2, req: [] },
+            { id: "ingles1", nombre: "Inglés I", area: "afbg", creditos: 6, ciclo: 2, req: [] },
+            { id: "compu", nombre: "Computación Básica", area: "afbg", creditos: 6, ciclo: 2, req: [] },
+
+            // Ciclo 3
+            { id: "const", nombre: "Derecho Constitucional Mexicano", area: "afd", creditos: 8, ciclo: 3, req: [] },
+            { id: "comercio", nombre: "Actos de Comercio y Soc. Mercantiles", area: "afd", creditos: 8, ciclo: 3, req: [] },
+            { id: "penal_esp", nombre: "Derecho Penal Especial", area: "afd", creditos: 8, ciclo: 3, req: ["penal_gen"], reqNombre: "Derecho Penal General" },
+            { id: "obligaciones", nombre: "Derecho de las Obligaciones Civiles", area: "afd", creditos: 8, ciclo: 3, req: [] },
+            { id: "opt_aid_1", nombre: "Optativa 1 AID (Elegir 1 de 2)", area: "aid", creditos: 8, ciclo: 3, req: [] },
+            { id: "ingles2", nombre: "Inglés II", area: "afbg", creditos: 6, ciclo: 3, req: ["ingles1"], reqNombre: "Inglés I" },
+
+            // Ciclo 4
+            { id: "int_pub", nombre: "Derecho Internacional Público", area: "afd", creditos: 8, ciclo: 4, req: ["const"], reqNombre: "Derecho Constitucional Mexicano" },
+            { id: "titulos", nombre: "Títulos y Operaciones de Crédito", area: "afd", creditos: 8, ciclo: 4, req: ["comercio"], reqNombre: "Actos de Comercio y Soc. Mercantiles" },
+            { id: "contratos", nombre: "Derecho de los Contratos Civiles", area: "afd", creditos: 8, ciclo: 4, req: ["obligaciones"], reqNombre: "Derecho de las Obligaciones Civiles" },
+            { id: "admin", nombre: "Derecho Administrativo", area: "afd", creditos: 8, ciclo: 4, req: [] },
+
+            // Ciclo 5
+            { id: "fiscal", nombre: "Derecho Fiscal", area: "afd", creditos: 7, ciclo: 5, req: ["admin"], reqNombre: "Derecho Administrativo" },
+            { id: "procesal", nombre: "Derecho Procesal", area: "afd", creditos: 7, ciclo: 5, req: [] },
+            { id: "int_priv", nombre: "Derecho Internacional Privado", area: "afd", credited: 8, ciclo: 5, req: ["contratos"], reqNombre: "Derecho de los Contratos Civiles" },
+            { id: "fundamentales", nombre: "Derechos Fundamentales", area: "afd", creditos: 8, ciclo: 5, req: [] },
+            { id: "opt_afd_1", nombre: "1 Optativa del AFD", area: "afd", creditos: 7, ciclo: 5, req: [] },
+
+            // Ciclo 6
+            { id: "laboral", nombre: "Derecho Laboral", area: "afd", creditos: 8, ciclo: 6, req: [] },
+            { id: "proc_penal", nombre: "Derecho Procesal Penal", area: "afd", creditos: 8, ciclo: 6, req: ["procesal", "penal_esp"], reqNombre: "Derecho Procesal y Penal Especial" },
+            { id: "proc_civil", nombre: "Derecho Procesal Civil", area: "afd", creditos: 8, ciclo: 6, req: ["procesal"], reqNombre: "Derecho Procesal" },
+            { id: "intro_amparo", nombre: "Introducción al Amparo", area: "afd", creditos: 7, ciclo: 6, req: ["fundamentales"], reqNombre: "Derechos Fundamentales" },
+            { id: "opt_aft_1", nombre: "Optativa 1 AFT (Según acentuación)", area: "optativa", creditos: 7, ciclo: 6, req: [] },
+            { id: "elec_1", nombre: "Electiva 1 (Área de Acentuación AFT)", area: "electiva", creditos: 7, ciclo: 6, req: [] },
+
+            // Ciclo 7
+            { id: "proc_laboral", nombre: "Derecho Procesal Laboral", area: "afd", creditos: 8, ciclo: 7, req: ["laboral"], reqNombre: "Derecho Laboral" },
+            { id: "proc_adm_fis", nombre: "Derecho Procesal Admin./Fiscal", area: "afd", creditos: 7, ciclo: 7, req: ["fiscal"], reqNombre: "Derecho Fiscal" },
+            { id: "amparo", nombre: "Procesos de Amparo", area: "afd", creditos: 7, ciclo: 7, req: ["intro_amparo"], reqNombre: "Introducción al Amparo" },
+            { id: "protocolo", nombre: "Protocolo de Investigación Jurídica", area: "aftob", creditos: 3, ciclo: 7, req: [] },
+            { id: "opt_aft_2", nombre: "Optativa 2 AFT (Según acentuación)", area: "optativa", creditos: 7, ciclo: 7, req: [] },
+            { id: "servicio_social_1", nombre: "Servicio Social", area: "aftob", creditos: 6, ciclo: 7, req: [] },
+
+            // Ciclo 8
+            { id: "filo", nombre: "Filosofía del Derecho", area: "afd", creditos: 8, ciclo: 8, req: [] },
+            { id: "seguridad", nombre: "Derecho de la Seguridad Social", area: "afd", creditos: 8, ciclo: 8, req: ["laboral"], reqNombre: "Derecho Laboral" },
+            { id: "opt_aft_3", nombre: "Optativa 3 AFT (Según acentuación)", area: "optativa", creditos: 7, ciclo: 8, req: [] },
+            { id: "elec_2", nombre: "Electiva 2 (Área de Acentuación AFT)", area: "electiva", creditos: 7, ciclo: 8, req: [] },
+            { id: "exp_recepcional", nombre: "Experiencia Recepcional", area: "aftob", creditos: 12, ciclo: 8, req: ["protocolo"], reqNombre: "Protocolo de Inv. Jurídica" },
+            { id: "servicio_social_2", nombre: "Servicio Social", area: "aftob", creditos: 6, ciclo: 8, req: [] }
+        ];
+
+        // Cargar progreso inicial desde LocalStorage o vacío
+        let aprobadas = JSON.parse(localStorage.getItem('derecho_aprobadas')) || [];
+
+        function renderMalla() {
+            const container = document.getElementById('malla');
+            container.innerHTML = '';
+
+            // Renderizar por cada una de las 8 columnas (Ciclos)
+            for (let c = 1; c <= 8; c++) {
+                const col = document.createElement('div');
+                col.className = 'columna-ciclo';
+                
+                const titulo = document.createElement('div');
+                titulo.className = 'titulo-ciclo';
+                titulo.innerText = `${c}er ciclo`;
+                if(c>=4) titulo.innerText = `${c}to ciclo`;
+                if(c==7) titulo.innerText = `7mo ciclo`;
+                col.appendChild(titulo);
+
+                const materiasCiclo = materias.filter(m => m.ciclo === c);
+                materiasCiclo.forEach(m => {
+                    const card = document.createElement('div');
+                    
+                    // Verificar prerrequisitos
+                    const bloqueada = m.req.some(reqId => !aprobadas.includes(reqId));
+                    const aprobada = aprobadas.includes(m.id);
+
+                    card.className = `materia ${m.area}`;
+                    card.id = m.id;
+                    card.innerHTML = `<div>${m.nombre}</div><div class="creditos">(${m.creditos} Cred)</div>`;
+
+                    if (aprobada) {
+                        card.classList.add('aprobada');
+                    } else if (bloqueada) {
+                        card.classList.add('bloqueada');
+                        const tooltip = document.createElement('span');
+                        tooltip.className = 'tooltip';
+                        tooltip.innerText = `Bloqueada. Requiere aprobar primero: ${m.reqNombre}`;
+                        card.appendChild(tooltip);
+                    }
+
+                    // Evento Click
+                    card.onclick = () => toggleMateria(m.id, bloqueada);
+                    col.appendChild(card);
+                });
+
+                container.appendChild(col);
+            }
+        }
+
+        function toggleMateria(id, bloqueada) {
+            if (bloqueada) return; // Si está bloqueada, no hace nada
+
+            const index = aprobadas.indexOf(id);
+            if (index > -1) {
+                // Si ya está aprobada, la quitamos, pero también quitamos las que dependen de ella
+                aprobadas.splice(index, 1);
+                desaprobarDependientes(id);
+            } else {
+                // Si no, la agregamos
+                aprobadas.push(id);
+            }
+
+            localStorage.setItem('derecho_aprobadas', JSON.stringify(aprobadas));
+            renderMalla();
+        }
+
+        // Función recursiva por si desmarcan una llave básica
+        function desaprobarDependientes(id) {
+            materias.forEach(m => {
+                if (m.req.includes(id)) {
+                    const index = aprobadas.indexOf(m.id);
+                    if (index > -1) {
+                        aprobadas.splice(index, 1);
+                        desaprobarDependientes(m.id);
+                    }
+                }
+            });
+        }
+
+        function reiniciarProgreso() {
+            if (confirm('¿Seguro que quieres borrar todo tu avance registrado?')) {
+                aprobadas = [];
+                localStorage.setItem('derecho_aprobadas', JSON.stringify(aprobadas));
+                renderMalla();
+            }
+        }
+
+        function exportarPDF() {
+            window.print();
+        }
+
+        // Inicializar la interfaz
+        renderMalla();
+    </script>
+</body>
+</html>
