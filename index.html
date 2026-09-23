@@ -10,15 +10,9 @@
 
   <style>
     :root {
-      --card-radius: 6px;
-      
-      /* Colores por Área Oficiales */
-      --color-afbg: #4a5568;
-      --color-aid: #0284c7;
-      --color-afd: #0d9488;
-      --color-aftob: #b91c1c;
-      --color-aftop: #7e22ce;
-      --color-afel: #ca8a04;
+      --primary-dark: #1e293b;
+      --card-bg: #f8fafc;
+      --card-border: #cbd5e1;
     }
 
     * {
@@ -34,230 +28,210 @@
       padding: 15px;
     }
 
+    /* ENCABEZADO */
     .app-header {
-      background: #1e293b;
+      background: #102a45;
       color: #ffffff;
-      padding: 15px 20px;
+      padding: 18px 20px;
       border-radius: 8px;
       margin-bottom: 15px;
+      text-align: center;
       box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     }
 
-    .app-header h1 { font-size: 1.25rem; font-weight: 700; }
-    .app-header h2 { font-size: 0.9rem; font-weight: 400; opacity: 0.8; }
+    .app-header h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.5px; }
+    .app-header h2 { font-size: 0.85rem; font-weight: 400; opacity: 0.9; margin-top: 4px; }
 
+    /* PANEL DE CONTROL Y FORMULARIO */
     .control-panel {
       background: #ffffff;
       padding: 15px 20px;
       border-radius: 8px;
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 15px;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 15px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     .inputs-container { display: flex; gap: 15px; flex-wrap: wrap; }
-    .field-group { display: flex; flex-direction: column; }
-    .field-group label { font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: #475569; }
-    .field-group input { padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.85rem; }
+    .field-group { display: flex; align-items: center; gap: 8px; }
+    .field-group label { font-size: 0.85rem; font-weight: 700; color: #334155; }
+    .field-group input { padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; outline: none; }
 
-    .progress-box { min-width: 200px; flex: 1; max-width: 300px; }
-    .progress-info { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px; font-weight: 600; }
-    .progress-track { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
-    .progress-fill { height: 100%; width: 0%; background: #0284c7; transition: width 0.3s; }
+    .progress-box { flex: 1; max-width: 320px; min-width: 200px; }
+    .progress-info { font-size: 0.8rem; margin-bottom: 4px; font-weight: 600; color: #334155; }
+    .progress-track { height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: #2563eb; transition: width 0.3s; }
 
     .actions-group { display: flex; gap: 8px; }
-    .btn { padding: 8px 12px; border: none; border-radius: 5px; font-weight: 700; font-size: 0.8rem; cursor: pointer; }
-    .btn-img { background: #0284c7; color: white; }
-    .btn-pdf { background: #0d9488; color: white; }
+    .btn { padding: 8px 14px; border: none; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+    .btn-img { background: #2563eb; color: white; }
+    .btn-pdf { background: #15803d; color: white; }
     .btn-reset { background: #e2e8f0; color: #475569; }
 
+    /* BARRA DE ESTADOS Y LEYENDA */
+    .legend-panel {
+      background: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 15px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-title { font-weight: 700; color: #334155; }
+    .badge-state {
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+    .badge-pending { border: 1px solid #1e293b; background: #ffffff; color: #1e293b; }
+    .badge-passed { border: 1px solid #16a34a; background: #dcfce7; color: #15803d; }
+    .badge-planning { border: 1px solid #2563eb; background: #eff6ff; color: #1d4ed8; }
+    .badge-second { border: 1px dashed #d97706; background: #fffbe3; color: #b45309; }
+
+    /* CONTENEDOR DE LA MALLA */
     .malla-wrapper {
       background: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1.5px solid #1e293b;
       overflow-x: auto;
     }
 
     .export-header {
       display: none;
       margin-bottom: 15px;
-      border-bottom: 2px solid #1e293b;
-      padding-bottom: 10px;
+      border-bottom: 2px solid #102a45;
+      padding-bottom: 8px;
     }
 
-    .export-header h2 { font-size: 1.1rem; color: #1e293b; font-weight: 800; }
+    .export-header h2 { font-size: 1.1rem; color: #102a45; font-weight: 800; }
     .export-header p { font-size: 0.85rem; color: #475569; font-weight: 600; }
 
     .malla-grid {
       display: grid;
       grid-template-columns: repeat(8, minmax(130px, 1fr));
-      gap: 8px;
+      gap: 10px;
     }
 
     .cycle-column {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .cycle-header {
-      background: #475569;
+      background: #23354d;
       color: #ffffff;
       text-align: center;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       padding: 6px;
-      border-radius: 4px;
-      letter-spacing: 1px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
     }
 
+    /* TARJETA DE MATERIA ESTILO ORIGINAL */
     .subject-card {
-      border-radius: var(--card-radius);
-      height: 105px;
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
+      padding: 8px;
+      min-height: 100px;
       display: flex;
       flex-direction: column;
-      position: relative;
+      justify-content: space-between;
       cursor: pointer;
-      overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
       user-select: none;
-      transition: transform 0.1s;
+      background-color: #f8fafc;
+      transition: all 0.1s ease;
     }
 
     .subject-card:hover { transform: translateY(-2px); }
 
-    .card-top-bar {
-      background: rgba(0, 0, 0, 0.25);
-      color: #ffffff;
-      padding: 3px 6px;
+    .card-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .card-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.2;
+      margin: 6px 0;
+    }
+
+    .card-foot {
       font-size: 0.65rem;
       font-weight: 700;
+      color: #475569;
+      border-top: 1px dotted #cbd5e1;
+      padding-top: 4px;
     }
 
-    .badge-num {
-      background: #ffffff;
-      color: #000000;
-      border-radius: 50%;
-      width: 15px;
-      height: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.6rem;
+    /* ESTADOS VISUALES IDENTICOS */
+    .subject-card.state-passed {
+      background-color: #dcfce7 !important;
+      border-color: #16a34a !important;
     }
-
-    .card-body {
-      padding: 6px 4px;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .subject-title {
-      color: #ffffff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      line-height: 1.15;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-    }
-
-    .card-bottom-bar {
-      background: rgba(0, 0, 0, 0.2);
-      color: #ffffff;
-      padding: 2px 6px;
-      text-align: right;
-      font-size: 0.6rem;
-      font-weight: 700;
-    }
-
-    .subject-card.area-AFBG { background-color: var(--color-afbg); }
-    .subject-card.area-AID  { background-color: var(--color-aid); }
-    .subject-card.area-AFD  { background-color: var(--color-afd); }
-    .subject-card.area-AFTOB{ background-color: var(--color-aftob); }
-    .subject-card.area-AFTOP{ background-color: var(--color-aftop); }
-    .subject-card.area-AFEL { background-color: var(--color-afel); }
-
-    .subject-card.state-passed::after {
-      content: "";
-      position: absolute;
-      top: -10%;
-      left: 48%;
-      width: 10px;
-      height: 140%;
-      background-color: #800000;
-      transform: rotate(45deg);
-      box-shadow: 0 0 4px rgba(0,0,0,0.5);
-      z-index: 10;
-    }
-
-    .subject-card.state-passed { filter: brightness(0.85); }
+    .subject-card.state-passed .state-icon { color: #16a34a; }
 
     .subject-card.state-planning {
-      outline: 3px solid #0284c7;
-      outline-offset: -3px;
+      background-color: #eff6ff !important;
+      border: 2px solid #2563eb !important;
     }
+    .subject-card.state-planning .state-icon { color: #2563eb; }
 
     .subject-card.state-second {
-      outline: 3px dashed #f97316;
-      outline-offset: -3px;
+      background-color: #fffbe3 !important;
+      border: 2px dashed #d97706 !important;
     }
-
-    .legend-bar {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 15px;
-      font-size: 0.8rem;
-      background: #ffffff;
-      padding: 10px 15px;
-      border-radius: 6px;
-      flex-wrap: wrap;
-    }
-
-    .legend-item { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-    .color-box { width: 14px; height: 14px; border-radius: 3px; }
+    .subject-card.state-second .state-icon { color: #d97706; }
 
     @media print {
       .no-print { display: none !important; }
       body { background: white; padding: 0; }
-      .malla-wrapper { box-shadow: none; padding: 0; overflow: visible; }
+      .malla-wrapper { border: none; padding: 0; overflow: visible; }
     }
   </style>
 </head>
 <body>
 
   <header class="app-header no-print">
-    <h1>SISTEMA DE ENSEÑANZA ABIERTA (SEA) — UNIVERSIDAD VERACRUZANA</h1>
-    <h2>Mapa Curricular Interactivo Plan de Estudios Licenciatura en Derecho (MEIF 2008)</h2>
+    <h1>UNIVERSIDAD VERACRUZANA — SEA (SISTEMA DE ENSEÑANZA ABIERTA)</h1>
+    <h2>Mapa Curricular Plan de Estudios 2008 (MEIF)</h2>
   </header>
 
   <main>
     <section class="control-panel no-print">
       <div class="inputs-container">
         <div class="field-group">
-          <label>Estudiante:</label>
-          <input type="text" id="studentName" placeholder="Nombre completo...">
+          <label>👤 Nombre del Estudiante:</label>
+          <input type="text" id="studentName" placeholder="Escribe tu nombre completo...">
         </div>
         <div class="field-group">
-          <label>Matrícula:</label>
+          <label>🪪 Matrícula:</label>
           <input type="text" id="studentId" placeholder="Ej. S20012345">
         </div>
       </div>
 
       <div class="progress-box">
         <div class="progress-info">
-          <span>Avance de Créditos</span>
-          <span><strong id="approvedCredits">0</strong> / 350</span>
+          Avance de Créditos: <strong><span id="approvedCredits">0</span> / 350 Cred.</strong>
         </div>
         <div class="progress-track">
           <div class="progress-fill" id="progressBar"></div>
@@ -265,26 +239,25 @@
       </div>
 
       <div class="actions-group">
-        <button id="btnExportImage" class="btn btn-img">📷 Imagen</button>
-        <button id="btnExportPDF" class="btn btn-pdf">📄 PDF</button>
+        <button id="btnExportImage" class="btn btn-img">🖼️ Guardar Imagen</button>
+        <button id="btnExportPDF" class="btn btn-pdf">📄 Guardar PDF</button>
         <button id="btnReset" class="btn btn-reset">🔄 Reiniciar</button>
       </div>
     </section>
 
-    <section class="legend-bar no-print">
-      <span style="font-weight:bold;">Áreas:</span>
-      <div class="legend-item"><div class="color-box" style="background:var(--color-afbg);"></div> AFBG</div>
-      <div class="legend-item"><div class="color-box" style="background:var(--color-aid);"></div> AID</div>
-      <div class="legend-item"><div class="color-box" style="background:var(--color-afd);"></div> AFD</div>
-      <div class="legend-item"><div class="color-box" style="background:var(--color-aftob);"></div> AFTOB</div>
-      <div class="legend-item"><div class="color-box" style="background:var(--color-aftop);"></div> AFTOP</div>
-      <div class="legend-item"><div class="color-box" style="background:var(--color-afel);"></div> AFEL</div>
-      <span style="margin-left:auto; font-style:italic; color:#64748b;">Haz clic para alternar estado</span>
+    <!-- LEYENDA IDÉNTICA -->
+    <section class="legend-panel no-print">
+      <span class="legend-title">Estado de Experiencias Educativas:</span>
+      <span class="badge-state badge-pending">[ ] Por Cursar</span>
+      <span class="badge-state badge-passed">[✓] Cursada / Aprobada</span>
+      <span class="badge-state badge-planning">[★] Por Inscribir</span>
+      <span class="badge-state badge-second">[▲] En 2ª Inscripción</span>
+      <span style="margin-left:auto; font-style:italic; color:#64748b;">💡 Haz clic en cualquier bloque para cambiar su estado.</span>
     </section>
 
     <div id="exportableArea" class="malla-wrapper">
       <div id="exportHeader" class="export-header">
-        <h2>SISTEMA DE ENSEÑANZA ABIERTA (SEA) — UNIVERSIDAD VERACRUZANA</h2>
+        <h2>UNIVERSIDAD VERACRUZANA — SEA (SISTEMA DE ENSEÑANZA ABIERTA)</h2>
         <p id="exportMetaInfo">Estudiante: ___________________ | Matrícula: ____________ | Créditos: 0 / 350</p>
       </div>
       <div class="malla-grid" id="mallaGrid"></div>
@@ -292,93 +265,93 @@
   </main>
 
   <script>
-    const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+    const CYCLE_LABELS = ["1ER CICLO", "2DO CICLO", "3ER CICLO", "4TO CICLO", "5TO CICLO", "6TO CICLO", "7MO CICLO", "8VO CICLO"];
 
-    // ESTRUCTURA EXACTA SEGÚN EL ORDEN VERTICAL DEL MAPA CURRICULAR OFICIAL
+    // ORDEN VERTICAL CORRECTO SEGÚN EL MAPA CURRICULAR OFICIAL DE DERECHO MEIF
     const curriculumData = [
       {
-        cycleIndex: 0, // 1er Ciclo
+        cycleIndex: 0, // 1ER CICLO
         subjects: [
-          { id: "c1_dromano", code: "DER-101", name: "Derecho Romano", area: "AID", credits: 8 },
-          { id: "c1_intro", code: "DER-102", name: "Introducción al Derecho", area: "AID", credits: 8 },
-          { id: "c1_tpolitica", code: "DER-103", name: "Teoría Política", area: "AID", credits: 8 },
-          { id: "c1_tecon", code: "DER-104", name: "Teoría Económica", area: "AID", credits: 8 },
-          { id: "c1_metod", code: "DER-105", name: "Metodología de la Inv. Jurídica", area: "AID", credits: 8 },
-          { id: "c1_lectura", code: "AFBG-01", name: "Lectura y Redacción...", area: "AFBG", credits: 6 },
-          { id: "c1_pensamiento", code: "AFBG-02", name: "Pensamiento Crítico y Creativo", area: "AFBG", credits: 6 }
+          { id: "c1_dromano", area: "AID", name: "Derecho Romano", credits: 8 },
+          { id: "c1_intro", area: "AID", name: "Introducción al Derecho", credits: 8 },
+          { id: "c1_tpolitica", area: "AID", name: "Teoría Política", credits: 8 },
+          { id: "c1_tecon", area: "AID", name: "Teoría Económica", credits: 8 },
+          { id: "c1_metod", area: "AID", name: "Metodología de la Inv. Jurídica", credits: 8 },
+          { id: "c1_lectura", area: "AFBG", name: "Lectura y Redacción...", credits: 6 },
+          { id: "c1_pensamiento", area: "AFBG", name: "Pensamiento Crítico y Creativo", credits: 6 }
         ]
       },
       {
-        cycleIndex: 1, // 2do Ciclo
+        cycleIndex: 1, // 2DO CICLO
         subjects: [
-          { id: "c2_personas", code: "DER-201", name: "Derecho de Personas y Familia", area: "AFD", credits: 8 },
-          { id: "c2_instromano", code: "DER-202", name: "Inst. de Derecho Privado Romano", area: "AFD", credits: 8 },
-          { id: "c2_obligaciones", code: "DER-203", name: "Derecho de las Obligaciones Civiles", area: "AFD", credits: 8 },
-          { id: "c2_opt1aid", code: "DER-204", name: "Optativa 1 AID", area: "AID", credits: 8 },
-          { id: "c2_ingles1", code: "AFBG-03", name: "Inglés I", area: "AFBG", credits: 6 },
-          { id: "c2_ingles2", code: "AFBG-04", name: "Inglés II", area: "AFBG", credits: 6 },
-          { id: "c2_compu", code: "AFBG-05", name: "Computación Básica", area: "AFBG", credits: 6 }
+          { id: "c2_personas", area: "AFD", name: "Derecho de Personas y Familia", credits: 8 },
+          { id: "c2_instromano", area: "AFD", name: "Inst. de Derecho Privado Romano", credits: 8 },
+          { id: "c2_obligaciones", area: "AFD", name: "Derecho de las Obligaciones Civiles", credits: 8 },
+          { id: "c2_opt1aid", area: "AID", name: "Optativa 1 AID (Metod. Ciencia del Derecho)", credits: 8 },
+          { id: "c2_ingles1", area: "AFBG", name: "Inglés I", credits: 6 },
+          { id: "c2_ingles2", area: "AFBG", name: "Inglés II", credits: 6 },
+          { id: "c2_compu", area: "AFBG", name: "Computación Básica", credits: 6 }
         ]
       },
       {
-        cycleIndex: 2, // 3er Ciclo
+        cycleIndex: 2, // 3ER CICLO
         subjects: [
-          { id: "c3_const", code: "DER-301", name: "Derecho Constitucional Mexicano", area: "AFD", credits: 8 },
-          { id: "c3_comercio", code: "DER-302", name: "Actos de Comercio y Soc. Mercantiles", area: "AFD", credits: 8 },
-          { id: "c3_penalgen", code: "DER-303", name: "Derecho Penal General", area: "AFD", credits: 8 },
-          { id: "c3_derechosfund", code: "DER-304", name: "Derechos Fundamentales", area: "AFD", credits: 8 },
-          { id: "c3_admin", code: "DER-305", name: "Derecho Administrativo", area: "AFD", credits: 8 }
+          { id: "c3_const", area: "AFD", name: "Derecho Constitucional Mexicano", credits: 8 },
+          { id: "c3_comercio", area: "AFD", name: "Actos de Comercio y Soc. Mercantiles", credits: 8 },
+          { id: "c3_penalgen", area: "AFD", name: "Derecho Penal General", credits: 8 },
+          { id: "c3_derechosfund", area: "AFD", name: "Derechos Fundamentales", credits: 8 },
+          { id: "c3_admin", area: "AFD", name: "Derecho Administrativo", credits: 8 }
         ]
       },
       {
-        cycleIndex: 3, // 4to Ciclo
+        cycleIndex: 3, // 4TO CICLO
         subjects: [
-          { id: "c4_penalesp", code: "DER-401", name: "Derecho Penal Especial", area: "AFD", credits: 8 },
-          { id: "c4_bienes", code: "DER-402", name: "Derecho de Bienes y Sucesiones", area: "AFD", credits: 8 },
-          { id: "c4_laboral", code: "DER-403", name: "Derecho Laboral", area: "AFD", credits: 8 },
-          { id: "c4_intpub", code: "DER-404", name: "Derecho Internacional Público", area: "AFD", credits: 8 },
-          { id: "c4_introamparo", code: "DER-405", name: "Introducción al Amparo", area: "AFD", credits: 7 }
+          { id: "c4_penalesp", area: "AFD", name: "Derecho Penal Especial", credits: 8 },
+          { id: "c4_bienes", area: "AFD", name: "Derecho de Bienes y Sucesiones", credits: 8 },
+          { id: "c4_laboral", area: "AFD", name: "Derecho Laboral", credits: 8 },
+          { id: "c4_intpub", area: "AFD", name: "Derecho Internacional Público", credits: 8 },
+          { id: "c4_introamparo", area: "AFD", name: "Introducción al Amparo", credits: 7 }
         ]
       },
       {
-        cycleIndex: 4, // 5to Ciclo
+        cycleIndex: 4, // 5TO CICLO
         subjects: [
-          { id: "c5_fiscal", code: "DER-501", name: "Derecho Fiscal", area: "AFD", credits: 7 },
-          { id: "c5_procpenal", code: "DER-502", name: "Derecho Procesal Penal", area: "AFD", credits: 8 },
-          { id: "c5_procesal", code: "DER-503", name: "Derecho Procesal", area: "AFD", credits: 7 },
-          { id: "c5_titulos", code: "DER-504", name: "Títulos y Operaciones de Crédito", area: "AFD", credits: 8 },
-          { id: "c5_opt1aft", code: "AFT-505", name: "Optativa 1 AFT", area: "AFTOP", credits: 7 },
-          { id: "c5_optafd", code: "AFD-506", name: "1 Optativa del AFD", area: "AFD", credits: 7 }
+          { id: "c5_fiscal", area: "AFD", name: "Derecho Fiscal", credits: 7 },
+          { id: "c5_procpenal", area: "AFD", name: "Derecho Procesal Penal", credits: 8 },
+          { id: "c5_procesal", area: "AFD", name: "Derecho Procesal", credits: 7 },
+          { id: "c5_titulos", area: "AFD", name: "Títulos y Operaciones de Crédito", credits: 8 },
+          { id: "c5_opt1aft", area: "AFTOP", name: "Optativa 1 AFT (Según Acentuación)", credits: 7 },
+          { id: "c5_optafd", area: "AFD", name: "1 Optativa del AFD", credits: 7 }
         ]
       },
       {
-        cycleIndex: 5, // 6to Ciclo
+        cycleIndex: 5, // 6TO CICLO
         subjects: [
-          { id: "c6_proccivil", code: "DER-601", name: "Derecho Procesal Civil", area: "AFD", credits: 8 },
-          { id: "c6_contratos", code: "DER-602", name: "Derecho de los Contratos Civiles", area: "AFD", credits: 8 },
-          { id: "c6_intpriv", code: "DER-603", name: "Derecho Internacional Privado", area: "AFD", credits: 8 },
-          { id: "c6_proclaboral", code: "DER-604", name: "Derecho Procesal Laboral", area: "AFD", credits: 8 },
-          { id: "c6_electiva1", code: "AFEL-01", name: "Electiva 1", area: "AFEL", credits: 7 },
-          { id: "c6_protocolo", code: "DER-606", name: "Protocolo de Inv. Jurídica", area: "AFTOB", credits: 3 }
+          { id: "c6_proccivil", area: "AFD", name: "Derecho Procesal Civil", credits: 8 },
+          { id: "c6_contratos", area: "AFD", name: "Derecho de los Contratos Civiles", credits: 8 },
+          { id: "c6_intpriv", area: "AFD", name: "Derecho Internacional Privado", credits: 8 },
+          { id: "c6_proclaboral", area: "AFD", name: "Derecho Procesal Laboral", credits: 8 },
+          { id: "c6_electiva1", area: "AFEL", name: "Electiva 1", credits: 7 },
+          { id: "c6_protocolo", area: "AFTOB", name: "Protocolo de Inv. Jurídica", credits: 3 }
         ]
       },
       {
-        cycleIndex: 6, // 7mo Ciclo
+        cycleIndex: 6, // 7MO CICLO
         subjects: [
-          { id: "c7_filosofia", code: "DER-701", name: "Filosofía del Derecho", area: "AFD", credits: 8 },
-          { id: "c7_procfiscal", code: "DER-702", name: "Derecho Procesal Admin./Fiscal", area: "AFD", credits: 7 },
-          { id: "c7_seguridadsoc", code: "DER-703", name: "Derecho de la Seguridad Social", area: "AFD", credits: 8 },
-          { id: "c7_procamparo", code: "DER-704", name: "Procesos de Amparo", area: "AFD", credits: 7 },
-          { id: "c7_electiva2", code: "AFEL-02", name: "Electiva 2", area: "AFEL", credits: 7 },
-          { id: "c7_opt2aft", code: "AFT-706", name: "Optativa 2 AFT", area: "AFTOP", credits: 7 }
+          { id: "c7_filosofia", area: "AFD", name: "Filosofía del Derecho", credits: 8 },
+          { id: "c7_procfiscal", area: "AFD", name: "Derecho Procesal Admin. / Fiscal", credits: 7 },
+          { id: "c7_seguridadsoc", area: "AFD", name: "Derecho de la Seguridad Social", credits: 8 },
+          { id: "c7_procamparo", area: "AFD", name: "Procesos de Amparo", credits: 7 },
+          { id: "c7_electiva2", area: "AFEL", name: "Electiva 2", credits: 7 },
+          { id: "c7_opt2aft", area: "AFTOP", name: "Optativa 2 AFT (Según Acentuación)", credits: 7 }
         ]
       },
       {
-        cycleIndex: 7, // 8vo Ciclo
+        cycleIndex: 7, // 8VO CICLO
         subjects: [
-          { id: "c8_opt3aft", code: "AFT-801", name: "Optativa 3 AFT", area: "AFTOP", credits: 7 },
-          { id: "c8_recepcional", code: "DER-802", name: "Experiencia Recepcional", area: "AFTOB", credits: 12 },
-          { id: "c8_servicio", code: "DER-803", name: "Servicio Social", area: "AFTOB", credits: 6 }
+          { id: "c8_opt3aft", area: "AFTOP", name: "Optativa 3 AFT (Según Acentuación)", credits: 7 },
+          { id: "c8_recepcional", area: "AFTOB", name: "Experiencia Recepcional", credits: 12 },
+          { id: "c8_servicio", area: "AFTOB", name: "Servicio Social", credits: 6 }
         ]
       }
     ];
@@ -395,7 +368,6 @@
     function buildMalla() {
       const container = document.getElementById("mallaGrid");
       container.innerHTML = "";
-      let globalCounter = 1;
 
       curriculumData.forEach(col => {
         const cycleCol = document.createElement("div");
@@ -403,27 +375,27 @@
 
         const header = document.createElement("div");
         header.className = "cycle-header";
-        header.innerText = ROMAN_NUMERALS[col.cycleIndex];
+        header.innerText = CYCLE_LABELS[col.cycleIndex];
         cycleCol.appendChild(header);
 
         col.subjects.forEach(sub => {
           const currentState = userStates[sub.id] || "state-pending";
+          let icon = "[ ]";
+          if (currentState === "state-passed") icon = "[✓]";
+          else if (currentState === "state-planning") icon = "[★]";
+          else if (currentState === "state-second") icon = "[▲]";
 
           const card = document.createElement("div");
-          card.className = `subject-card area-${sub.area} ${currentState}`;
+          card.className = `subject-card ${currentState}`;
           card.dataset.id = sub.id;
 
           card.innerHTML = `
-            <div class="card-top-bar">
-              <span>${sub.code}</span>
-              <span class="badge-num">${globalCounter++}</span>
+            <div class="card-head">
+              <span>${sub.area}</span>
+              <span class="state-icon">${icon}</span>
             </div>
-            <div class="card-body">
-              <span class="subject-title">${sub.name}</span>
-            </div>
-            <div class="card-bottom-bar">
-              ${sub.credits} C
-            </div>
+            <div class="card-title">${sub.name}</div>
+            <div class="card-foot">${sub.credits} Cred.</div>
           `;
 
           card.addEventListener("click", () => toggleSubject(sub.id));
@@ -474,7 +446,7 @@
       document.getElementById("studentId").addEventListener("input", calculateStats);
 
       document.getElementById("btnReset").addEventListener("click", () => {
-        if (confirm("¿Reiniciar la malla?")) {
+        if (confirm("¿Reiniciar el estado de todas las materias?")) {
           userStates = {};
           saveData();
           buildMalla();
@@ -482,16 +454,16 @@
         }
       });
 
+      // EXPORTACIÓN SIN CORTES
       function prepareAreaForCapture() {
         const area = document.getElementById("exportableArea");
         const header = document.getElementById("exportHeader");
         
         header.style.display = "block";
-        
         const originalWidth = area.style.width;
         const originalOverflow = area.style.overflow;
 
-        area.style.width = "1350px";
+        area.style.width = "1380px";
         area.style.overflow = "visible";
 
         return () => {
@@ -505,7 +477,7 @@
         const resetStyles = prepareAreaForCapture();
         const area = document.getElementById("exportableArea");
 
-        html2canvas(area, { scale: 2, scrollX: 0, scrollY: 0, windowWidth: 1400 }).then(canvas => {
+        html2canvas(area, { scale: 2, scrollX: 0, scrollY: 0, windowWidth: 1450 }).then(canvas => {
           const link = document.createElement("a");
           link.download = `Malla_Derecho_SEA.png`;
           link.href = canvas.toDataURL("image/png");
@@ -518,7 +490,7 @@
         const resetStyles = prepareAreaForCapture();
         const area = document.getElementById("exportableArea");
 
-        html2canvas(area, { scale: 2, scrollX: 0, scrollY: 0, windowWidth: 1400 }).then(canvas => {
+        html2canvas(area, { scale: 2, scrollX: 0, scrollY: 0, windowWidth: 1450 }).then(canvas => {
           const imgData = canvas.toDataURL("image/png");
           const { jsPDF } = window.jspdf;
           const pdf = new jsPDF("landscape", "mm", "a4");
@@ -534,13 +506,13 @@
     }
 
     function saveData() {
-      localStorage.setItem("derecho_uv_malla_states_v4", JSON.stringify(userStates));
+      localStorage.setItem("derecho_uv_malla_states_v5", JSON.stringify(userStates));
       localStorage.setItem("derecho_uv_malla_name", document.getElementById("studentName").value);
       localStorage.setItem("derecho_uv_malla_id", document.getElementById("studentId").value);
     }
 
     function loadData() {
-      const saved = localStorage.getItem("derecho_uv_malla_states_v4");
+      const saved = localStorage.getItem("derecho_uv_malla_states_v5");
       if (saved) userStates = JSON.parse(saved);
 
       const savedName = localStorage.getItem("derecho_uv_malla_name");
