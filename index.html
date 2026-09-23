@@ -3,82 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Malla Interactiva - Licenciatura en Derecho (Plan 2008 MEIF)</title>
+  <title>Mapa Curricular Interactivo - Licenciatura en Derecho (MEIF 2008)</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Librerías externas para exportación a Imagen y PDF -->
+  <!-- Librerías de Exportación -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-  <header class="app-header">
-    <h1>Licenciatura en Derecho — Plan MEIF 2008</h1>
-    <p class="subtitle">Malla Curricular Interactiva y Seguimiento de Créditos</p>
+  <!-- Encabezado Principal -->
+  <header class="app-header no-print">
+    <div class="header-content">
+      <h1>UNIVERSIDAD VERACRUZANA — FACULTAD DE DERECHO</h1>
+      <h2>Mapa Curricular Plan de Estudios 2008 (MEIF)</h2>
+    </div>
   </header>
 
-  <main class="container">
+  <main class="main-container">
 
-    <!-- Panel de Control y Datos de Estudiante -->
+    <!-- Panel Superior de Control de Usuario -->
     <section class="control-panel no-print">
-      <div class="user-info">
-        <div class="input-group">
-          <label for="studentName">Nombre del Estudiante:</label>
-          <input type="text" id="studentName" placeholder="Ej. Ana María Pérez">
+      <div class="inputs-container">
+        <div class="field-group">
+          <label for="studentName">👤 Nombre del Estudiante:</label>
+          <input type="text" id="studentName" placeholder="Escribe tu nombre completo...">
         </div>
-        <div class="input-group">
-          <label for="studentId">Matrícula:</label>
-          <input type="text" id="studentId" placeholder="Ej. zS20012345">
-        </div>
-      </div>
-
-      <div class="stats-card">
-        <div class="stat-box">
-          <span class="stat-value" id="approvedCredits">0</span>
-          <span class="stat-label">/ 350 Créditos Aprobados</span>
-        </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" id="progressBar"></div>
+        <div class="field-group">
+          <label for="studentId">🪪 Matrícula:</label>
+          <input type="text" id="studentId" placeholder="Ej. S20012345">
         </div>
       </div>
 
-      <div class="actions">
-        <button id="btnExportImage" class="btn btn-primary">📷 Guardar como Imagen</button>
-        <button id="btnExportPDF" class="btn btn-secondary">📄 Guardar como PDF</button>
-        <button id="btnReset" class="btn btn-outline">🔄 Reiniciar Estados</button>
+      <!-- Medidor de Créditos -->
+      <div class="progress-box">
+        <div class="progress-info">
+          <span class="progress-title">Avance de Créditos</span>
+          <span class="progress-count"><strong id="approvedCredits">0</strong> / 350 Cred.</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressBar"></div>
+        </div>
+      </div>
+
+      <!-- Acciones principales -->
+      <div class="actions-group">
+        <button id="btnExportImage" class="btn btn-img">🖼️ Guardar Imagen</button>
+        <button id="btnExportPDF" class="btn btn-pdf">📄 Guardar PDF</button>
+        <button id="btnReset" class="btn btn-reset">🔄 Reiniciar</button>
       </div>
     </section>
 
-    <!-- Leyenda accesible (Funciona a color y en blanco y negro) -->
-    <section class="legend-panel">
-      <h3>Simbología y Leyenda de Estados:</h3>
-      <div class="legend-items">
-        <div class="legend-item state-pending">
-          <span class="badge">[ ]</span> Pendiente / Por Cursar
-        </div>
-        <div class="legend-item state-passed">
-          <span class="badge">[✓]</span> Cursada / Aprobada
-        </div>
-        <div class="legend-item state-planning">
-          <span class="badge">[★]</span> Por Inscribir (Deseada)
-        </div>
-        <div class="legend-item state-second">
-          <span class="badge">[⚠]</span> En 2ª Inscripción
-        </div>
+    <!-- Simbología Accesible (Color + Símbolo + Trama en Blanco/Negro) -->
+    <section class="legend-bar no-print">
+      <span class="legend-title">Estado de Experiencias Educativas:</span>
+      <div class="legend-badges">
+        <span class="status-pill state-pending"><span class="sym">[ ]</span> Por Cursar</span>
+        <span class="status-pill state-passed"><span class="sym">[✓]</span> Cursada / Aprobada</span>
+        <span class="status-pill state-planning"><span class="sym">[★]</span> Por Inscribir</span>
+        <span class="status-pill state-second"><span class="sym">[⚠]</span> En 2ª Inscripción</span>
       </div>
-      <p class="hint">💡 <em>Haz clic en cualquier materia para cambiar su estado progresivamente.</em></p>
+      <span class="legend-hint">💡 <em>Haz clic en cualquier bloque de materia para alternar entre sus estados.</em></span>
     </section>
 
-    <!-- Área exportable del mapa curricular -->
-    <div id="exportableArea" class="printable-area">
-      <div class="student-header-print">
-        <h2 id="printStudentName">Estudiante: ____________________</h2>
-        <h3 id="printStudentId">Matrícula: ____________________</h3>
-        <p id="printCredits">Créditos Acumulados: 0 / 350</p>
+    <!-- ÁREA EXPOTABLE (MAPA DE MALLA CURRICULAR POR COLUMNAS DE CICLOS) -->
+    <div id="exportableArea" class="malla-wrapper">
+      
+      <!-- Encabezado para la versión impresa/descargada -->
+      <div class="print-header">
+        <div class="print-title-block">
+          <h2>MAPA CURRICULAR INTERACTIVO DE LA LICENCIATURA EN DERECHO (PLAN 2008)</h2>
+          <p>Universidad Veracruzana | Modelo Educativo Integral y Flexible (MEIF)</p>
+        </div>
+        <div class="print-user-info">
+          <p><strong>Estudiante:</strong> <span id="printStudentName">___________________________</span></p>
+          <p><strong>Matrícula:</strong> <span id="printStudentId">___________</span></p>
+          <p><strong>Créditos Cursados:</strong> <span id="printCredits">0 / 350</span></p>
+        </div>
       </div>
 
-      <div class="grid-container" id="curriculumGrid">
-        <!-- Las materias se generarán dinámicamente con JavaScript -->
+      <!-- Contenedor Principal de la Malla en Formato Tabular de Ciclos -->
+      <div class="malla-grid" id="mallaGrid">
+        <!-- Generado dinámicamente con JavaScript por Columnas de Ciclos -->
       </div>
+
+      <!-- Áreas Optativas y Leyendas de Créditos al pie de la Malla -->
+      <div class="malla-footer-info">
+        <div class="info-card-area">
+          <h4>RESUMEN DE CRÉDITOS POR ÁREA</h4>
+          <ul class="area-credits-list">
+            <li><span class="dot afbg"></span> <strong>AFBG:</strong> Área de Formación Básica General (30 Cred / 5 EE)</li>
+            <li><span class="dot aid"></span> <strong>AID:</strong> Área de Iniciación a la Disciplina (56 Cred / 7 EE)</li>
+            <li><span class="dot afd"></span> <strong>AFD:</strong> Área de Formación Disciplinar (202 Cred / 26 EE)</li>
+            <li><span class="dot aftob"></span> <strong>AFTOB:</strong> Área Terminal Obligatoria (27 Cred / 3 EE)</li>
+            <li><span class="dot aftop"></span> <strong>AFTOP:</strong> Área Terminal Optativa (21 Cred / 3 EE)</li>
+            <li><span class="dot afel"></span> <strong>AFEL:</strong> Área de Elección Libre (14 Cred / 2 EE)</li>
+          </ul>
+        </div>
+        <div class="info-card-notes">
+          <h4>ÁREAS DE ACENTUACIÓN (AFTOP - 21 Créditos)</h4>
+          <p>• Filosofía, Teoría del Derecho y Disciplinas Auxiliares</p>
+          <p>• Derecho Penal y Disciplinas Auxiliares</p>
+          <p>• Derecho Constitucional y Administrativo</p>
+          <p>• Derecho Patrimonial | • Derecho Internacional</p>
+        </div>
+      </div>
+
     </div>
 
   </main>
