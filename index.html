@@ -10,10 +10,9 @@
 
   <style>
     :root {
-      --bg-dark: #2a2c2e;
       --card-radius: 6px;
       
-      /* Colores por Área */
+      /* Colores por Área Oficiales */
       --color-afbg: #4a5568;
       --color-aid: #0284c7;
       --color-afd: #0d9488;
@@ -35,7 +34,6 @@
       padding: 15px;
     }
 
-    /* ENCABEZADO Y CONTROLES */
     .app-header {
       background: #1e293b;
       color: #ffffff;
@@ -77,7 +75,6 @@
     .btn-pdf { background: #0d9488; color: white; }
     .btn-reset { background: #e2e8f0; color: #475569; }
 
-    /* CONTENEDOR DE LA MALLA */
     .malla-wrapper {
       background: #ffffff;
       padding: 20px;
@@ -86,7 +83,6 @@
       overflow-x: auto;
     }
 
-    /* ENCABEZADO EXCLUSIVO PARA DESCARGA / IMPRESIÓN */
     .export-header {
       display: none;
       margin-bottom: 15px;
@@ -103,7 +99,6 @@
       gap: 8px;
     }
 
-    /* COLUMNA / CICLO */
     .cycle-column {
       display: flex;
       flex-direction: column;
@@ -121,7 +116,6 @@
       letter-spacing: 1px;
     }
 
-    /* TARJETA DE MATERIA ESTILO GRÁFICO */
     .subject-card {
       border-radius: var(--card-radius);
       height: 105px;
@@ -135,11 +129,8 @@
       transition: transform 0.1s;
     }
 
-    .subject-card:hover {
-      transform: translateY(-2px);
-    }
+    .subject-card:hover { transform: translateY(-2px); }
 
-    /* BARRA SUPERIOR DE LA TARJETA */
     .card-top-bar {
       background: rgba(0, 0, 0, 0.25);
       color: #ffffff;
@@ -163,7 +154,6 @@
       font-size: 0.6rem;
     }
 
-    /* CUERPO DE LA TARJETA */
     .card-body {
       padding: 6px 4px;
       flex: 1;
@@ -181,7 +171,6 @@
       text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
-    /* BARRA INFERIOR CON CRÉDITOS */
     .card-bottom-bar {
       background: rgba(0, 0, 0, 0.2);
       color: #ffffff;
@@ -191,7 +180,6 @@
       font-weight: 700;
     }
 
-    /* COLORES SEGÚN ÁREA */
     .subject-card.area-AFBG { background-color: var(--color-afbg); }
     .subject-card.area-AID  { background-color: var(--color-aid); }
     .subject-card.area-AFD  { background-color: var(--color-afd); }
@@ -199,7 +187,6 @@
     .subject-card.area-AFTOP{ background-color: var(--color-aftop); }
     .subject-card.area-AFEL { background-color: var(--color-afel); }
 
-    /* ESTADO TACHADO (CURSADA) */
     .subject-card.state-passed::after {
       content: "";
       position: absolute;
@@ -213,23 +200,18 @@
       z-index: 10;
     }
 
-    .subject-card.state-passed {
-      filter: brightness(0.85);
-    }
+    .subject-card.state-passed { filter: brightness(0.85); }
 
-    /* ESTADO POR INSCRIBIR (BORDE AZUL) */
     .subject-card.state-planning {
       outline: 3px solid #0284c7;
       outline-offset: -3px;
     }
 
-    /* ESTADO 2ª INSCRIPCIÓN (BORDE AMARILLO/NARANJA) */
     .subject-card.state-second {
       outline: 3px dashed #f97316;
       outline-offset: -3px;
     }
 
-    /* LEYENDA */
     .legend-bar {
       display: flex;
       gap: 12px;
@@ -289,7 +271,6 @@
       </div>
     </section>
 
-    <!-- Simbología de Áreas -->
     <section class="legend-bar no-print">
       <span style="font-weight:bold;">Áreas:</span>
       <div class="legend-item"><div class="color-box" style="background:var(--color-afbg);"></div> AFBG</div>
@@ -298,7 +279,7 @@
       <div class="legend-item"><div class="color-box" style="background:var(--color-aftob);"></div> AFTOB</div>
       <div class="legend-item"><div class="color-box" style="background:var(--color-aftop);"></div> AFTOP</div>
       <div class="legend-item"><div class="color-box" style="background:var(--color-afel);"></div> AFEL</div>
-      <span style="margin-left:auto; font-style:italic; color:#64748b;">Haz clic para alternar: Cursada (Tachada) ➔ Por Cursar</span>
+      <span style="margin-left:auto; font-style:italic; color:#64748b;">Haz clic para alternar estado</span>
     </section>
 
     <div id="exportableArea" class="malla-wrapper">
@@ -313,97 +294,96 @@
   <script>
     const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
 
+    // ESTRUCTURA EXACTA SEGÚN EL ORDEN VERTICAL DEL MAPA CURRICULAR OFICIAL
     const curriculumData = [
       {
-        cycleIndex: 0,
+        cycleIndex: 0, // 1er Ciclo
         subjects: [
-          { id: "aid_dromano", code: "DER-101", name: "Derecho Romano", area: "AID", credits: 8 },
-          { id: "aid_introderecho", code: "DER-102", name: "Introducción al Derecho", area: "AID", credits: 8 },
-          { id: "aid_tpolitica", code: "DER-103", name: "Teoría Política", area: "AID", credits: 8 },
-          { id: "aid_teconomica", code: "DER-104", name: "Teoría Económica", area: "AID", credits: 8 },
-          { id: "aid_metodologia", code: "DER-105", name: "Metodología de la Inv. Jurídica", area: "AID", credits: 8 },
-          { id: "afbg_lectura", code: "AFBG-01", name: "Lectura y Redacción", area: "AFBG", credits: 6 },
-          { id: "afbg_pensamiento", code: "AFBG-02", name: "Pensamiento Crítico", area: "AFBG", credits: 6 }
+          { id: "c1_dromano", code: "DER-101", name: "Derecho Romano", area: "AID", credits: 8 },
+          { id: "c1_intro", code: "DER-102", name: "Introducción al Derecho", area: "AID", credits: 8 },
+          { id: "c1_tpolitica", code: "DER-103", name: "Teoría Política", area: "AID", credits: 8 },
+          { id: "c1_tecon", code: "DER-104", name: "Teoría Económica", area: "AID", credits: 8 },
+          { id: "c1_metod", code: "DER-105", name: "Metodología de la Inv. Jurídica", area: "AID", credits: 8 },
+          { id: "c1_lectura", code: "AFBG-01", name: "Lectura y Redacción...", area: "AFBG", credits: 6 },
+          { id: "c1_pensamiento", code: "AFBG-02", name: "Pensamiento Crítico y Creativo", area: "AFBG", credits: 6 }
         ]
       },
       {
-        cycleIndex: 1,
+        cycleIndex: 1, // 2do Ciclo
         subjects: [
-          { id: "afd_personas", code: "DER-201", name: "Derecho de Personas y Familia", area: "AFD", credits: 8 },
-          { id: "afd_instromano", code: "DER-202", name: "Inst. de Derecho Privado Romano", area: "AFD", credits: 8 },
-          { id: "aid_optativa1", code: "DER-203", name: "Optativa 1 AID", area: "AID", credits: 8 },
-          { id: "aid_optativa2", code: "DER-204", name: "Optativa 2 AID", area: "AID", credits: 8 },
-          { id: "afbg_ingles1", code: "AFBG-03", name: "Inglés I", area: "AFBG", credits: 6 },
-          { id: "afbg_ingles2", code: "AFBG-04", name: "Inglés II", area: "AFBG", credits: 6 },
-          { id: "afbg_compu", code: "AFBG-05", name: "Computación Básica", area: "AFBG", credits: 6 }
+          { id: "c2_personas", code: "DER-201", name: "Derecho de Personas y Familia", area: "AFD", credits: 8 },
+          { id: "c2_instromano", code: "DER-202", name: "Inst. de Derecho Privado Romano", area: "AFD", credits: 8 },
+          { id: "c2_obligaciones", code: "DER-203", name: "Derecho de las Obligaciones Civiles", area: "AFD", credits: 8 },
+          { id: "c2_opt1aid", code: "DER-204", name: "Optativa 1 AID", area: "AID", credits: 8 },
+          { id: "c2_ingles1", code: "AFBG-03", name: "Inglés I", area: "AFBG", credits: 6 },
+          { id: "c2_ingles2", code: "AFBG-04", name: "Inglés II", area: "AFBG", credits: 6 },
+          { id: "c2_compu", code: "AFBG-05", name: "Computación Básica", area: "AFBG", credits: 6 }
         ]
       },
       {
-        cycleIndex: 2,
+        cycleIndex: 2, // 3er Ciclo
         subjects: [
-          { id: "afd_const", code: "DER-301", name: "Derecho Constitucional Mex.", area: "AFD", credits: 8 },
-          { id: "afd_comercio", code: "DER-302", name: "Actos de Comercio y Sociedades", area: "AFD", credits: 8 },
-          { id: "afd_penalgen", code: "DER-303", name: "Derecho Penal General", area: "AFD", credits: 8 },
-          { id: "afd_obligaciones", code: "DER-304", name: "Derecho de Obligaciones", area: "AFD", credits: 8 },
-          { id: "afd_derechosfund", code: "DER-305", name: "Derechos Fundamentales", area: "AFD", credits: 8 }
+          { id: "c3_const", code: "DER-301", name: "Derecho Constitucional Mexicano", area: "AFD", credits: 8 },
+          { id: "c3_comercio", code: "DER-302", name: "Actos de Comercio y Soc. Mercantiles", area: "AFD", credits: 8 },
+          { id: "c3_penalgen", code: "DER-303", name: "Derecho Penal General", area: "AFD", credits: 8 },
+          { id: "c3_derechosfund", code: "DER-304", name: "Derechos Fundamentales", area: "AFD", credits: 8 },
+          { id: "c3_admin", code: "DER-305", name: "Derecho Administrativo", area: "AFD", credits: 8 }
         ]
       },
       {
-        cycleIndex: 3,
+        cycleIndex: 3, // 4to Ciclo
         subjects: [
-          { id: "afd_penalesp", code: "DER-401", name: "Derecho Penal Especial", area: "AFD", credits: 8 },
-          { id: "afd_bienes", code: "DER-402", name: "Derecho de Bienes y Sucesiones", area: "AFD", credits: 8 },
-          { id: "afd_laboral", code: "DER-403", name: "Derecho Laboral", area: "AFD", credits: 8 },
-          { id: "afd_intpub", code: "DER-404", name: "Derecho Internacional Público", area: "AFD", credits: 8 },
-          { id: "afd_admin", code: "DER-405", name: "Derecho Administrativo", area: "AFD", credits: 8 }
+          { id: "c4_penalesp", code: "DER-401", name: "Derecho Penal Especial", area: "AFD", credits: 8 },
+          { id: "c4_bienes", code: "DER-402", name: "Derecho de Bienes y Sucesiones", area: "AFD", credits: 8 },
+          { id: "c4_laboral", code: "DER-403", name: "Derecho Laboral", area: "AFD", credits: 8 },
+          { id: "c4_intpub", code: "DER-404", name: "Derecho Internacional Público", area: "AFD", credits: 8 },
+          { id: "c4_introamparo", code: "DER-405", name: "Introducción al Amparo", area: "AFD", credits: 7 }
         ]
       },
       {
-        cycleIndex: 4,
+        cycleIndex: 4, // 5to Ciclo
         subjects: [
-          { id: "afd_fiscal", code: "DER-501", name: "Derecho Fiscal", area: "AFD", credits: 7 },
-          { id: "afd_procpenal", code: "DER-502", name: "Derecho Procesal Penal", area: "AFD", credits: 8 },
-          { id: "afd_procesal", code: "DER-503", name: "Derecho Procesal", area: "AFD", credits: 7 },
-          { id: "afd_titulos", code: "DER-504", name: "Títulos y Op. de Crédito", area: "AFD", credits: 8 },
-          { id: "afd_introamparo", code: "DER-505", name: "Introducción al Amparo", area: "AFD", credits: 7 }
+          { id: "c5_fiscal", code: "DER-501", name: "Derecho Fiscal", area: "AFD", credits: 7 },
+          { id: "c5_procpenal", code: "DER-502", name: "Derecho Procesal Penal", area: "AFD", credits: 8 },
+          { id: "c5_procesal", code: "DER-503", name: "Derecho Procesal", area: "AFD", credits: 7 },
+          { id: "c5_titulos", code: "DER-504", name: "Títulos y Operaciones de Crédito", area: "AFD", credits: 8 },
+          { id: "c5_opt1aft", code: "AFT-505", name: "Optativa 1 AFT", area: "AFTOP", credits: 7 },
+          { id: "c5_optafd", code: "AFD-506", name: "1 Optativa del AFD", area: "AFD", credits: 7 }
         ]
       },
       {
-        cycleIndex: 5,
+        cycleIndex: 5, // 6to Ciclo
         subjects: [
-          { id: "afd_proccivil", code: "DER-601", name: "Derecho Procesal Civil", area: "AFD", credits: 8 },
-          { id: "afd_contratos", code: "DER-602", name: "Derecho de Contratos Civiles", area: "AFD", credits: 8 },
-          { id: "afd_intpriv", code: "DER-603", name: "Derecho Internacional Privado", area: "AFD", credits: 8 },
-          { id: "afd_proclaboral", code: "DER-604", name: "Derecho Procesal Laboral", area: "AFD", credits: 8 },
-          { id: "afd_optativa", code: "DER-605", name: "Optativa Disciplinar", area: "AFD", credits: 7 },
-          { id: "aftop_opt1", code: "AFT-606", name: "Optativa 1 Terminal", area: "AFTOP", credits: 7 },
-          { id: "afel_1", code: "AFEL-01", name: "Electiva Libre 1", area: "AFEL", credits: 7 }
+          { id: "c6_proccivil", code: "DER-601", name: "Derecho Procesal Civil", area: "AFD", credits: 8 },
+          { id: "c6_contratos", code: "DER-602", name: "Derecho de los Contratos Civiles", area: "AFD", credits: 8 },
+          { id: "c6_intpriv", code: "DER-603", name: "Derecho Internacional Privado", area: "AFD", credits: 8 },
+          { id: "c6_proclaboral", code: "DER-604", name: "Derecho Procesal Laboral", area: "AFD", credits: 8 },
+          { id: "c6_electiva1", code: "AFEL-01", name: "Electiva 1", area: "AFEL", credits: 7 },
+          { id: "c6_protocolo", code: "DER-606", name: "Protocolo de Inv. Jurídica", area: "AFTOB", credits: 3 }
         ]
       },
       {
-        cycleIndex: 6,
+        cycleIndex: 6, // 7mo Ciclo
         subjects: [
-          { id: "afd_filosofia", code: "DER-701", name: "Filosofía del Derecho", area: "AFD", credits: 8 },
-          { id: "afd_procfiscal", code: "DER-702", name: "Procesal Admin. y Fiscal", area: "AFD", credits: 7 },
-          { id: "afd_seguridadsoc", code: "DER-703", name: "Seguridad Social", area: "AFD", credits: 8 },
-          { id: "afd_procamparo", code: "DER-704", name: "Procesos de Amparo", area: "AFD", credits: 7 },
-          { id: "aftob_protocolo", code: "DER-705", name: "Protocolo de Inv. Jurídica", area: "AFTOB", credits: 3 },
-          { id: "aftop_opt2", code: "AFT-706", name: "Optativa 2 Terminal", area: "AFTOP", credits: 7 },
-          { id: "afel_2", code: "AFEL-02", name: "Electiva Libre 2", area: "AFEL", credits: 7 }
+          { id: "c7_filosofia", code: "DER-701", name: "Filosofía del Derecho", area: "AFD", credits: 8 },
+          { id: "c7_procfiscal", code: "DER-702", name: "Derecho Procesal Admin./Fiscal", area: "AFD", credits: 7 },
+          { id: "c7_seguridadsoc", code: "DER-703", name: "Derecho de la Seguridad Social", area: "AFD", credits: 8 },
+          { id: "c7_procamparo", code: "DER-704", name: "Procesos de Amparo", area: "AFD", credits: 7 },
+          { id: "c7_electiva2", code: "AFEL-02", name: "Electiva 2", area: "AFEL", credits: 7 },
+          { id: "c7_opt2aft", code: "AFT-706", name: "Optativa 2 AFT", area: "AFTOP", credits: 7 }
         ]
       },
       {
-        cycleIndex: 7,
+        cycleIndex: 7, // 8vo Ciclo
         subjects: [
-          { id: "aftob_recepcional", code: "DER-801", name: "Experiencia Recepcional", area: "AFTOB", credits: 12 },
-          { id: "aftob_servicio", code: "DER-802", name: "Servicio Social", area: "AFTOB", credits: 6 },
-          { id: "aftop_opt3", code: "AFT-803", name: "Optativa 3 Terminal", area: "AFTOP", credits: 7 }
+          { id: "c8_opt3aft", code: "AFT-801", name: "Optativa 3 AFT", area: "AFTOP", credits: 7 },
+          { id: "c8_recepcional", code: "DER-802", name: "Experiencia Recepcional", area: "AFTOB", credits: 12 },
+          { id: "c8_servicio", code: "DER-803", name: "Servicio Social", area: "AFTOB", credits: 6 }
         ]
       }
     ];
 
     let userStates = {};
-    let subjectCounter = 1;
 
     document.addEventListener("DOMContentLoaded", () => {
       loadData();
@@ -415,7 +395,7 @@
     function buildMalla() {
       const container = document.getElementById("mallaGrid");
       container.innerHTML = "";
-      subjectCounter = 1;
+      let globalCounter = 1;
 
       curriculumData.forEach(col => {
         const cycleCol = document.createElement("div");
@@ -436,7 +416,7 @@
           card.innerHTML = `
             <div class="card-top-bar">
               <span>${sub.code}</span>
-              <span class="badge-num">${subjectCounter++}</span>
+              <span class="badge-num">${globalCounter++}</span>
             </div>
             <div class="card-body">
               <span class="subject-title">${sub.name}</span>
@@ -502,18 +482,15 @@
         }
       });
 
-      // CAPTURA COMPLETA SIN RECORTES
       function prepareAreaForCapture() {
         const area = document.getElementById("exportableArea");
         const header = document.getElementById("exportHeader");
         
         header.style.display = "block";
         
-        // Guardamos estilos originales
         const originalWidth = area.style.width;
         const originalOverflow = area.style.overflow;
 
-        // Ancho forzado de 1350px para capturar todas las 8 columnas sin scrollbar
         area.style.width = "1350px";
         area.style.overflow = "visible";
 
@@ -557,13 +534,13 @@
     }
 
     function saveData() {
-      localStorage.setItem("derecho_uv_malla_states_v3", JSON.stringify(userStates));
+      localStorage.setItem("derecho_uv_malla_states_v4", JSON.stringify(userStates));
       localStorage.setItem("derecho_uv_malla_name", document.getElementById("studentName").value);
       localStorage.setItem("derecho_uv_malla_id", document.getElementById("studentId").value);
     }
 
     function loadData() {
-      const saved = localStorage.getItem("derecho_uv_malla_states_v3");
+      const saved = localStorage.getItem("derecho_uv_malla_states_v4");
       if (saved) userStates = JSON.parse(saved);
 
       const savedName = localStorage.getItem("derecho_uv_malla_name");
